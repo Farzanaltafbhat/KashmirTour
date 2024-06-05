@@ -18,10 +18,7 @@ const PORT = process.env.PORT || 5000;
 
 // Middleware
 app.use(bodyParser.json());
-app.use(cors({
-  origin: '*', // Replace with your allowed origin
-}));
-
+app.use(cors()); // Allow all origins, you can set specific origins if needed
 
 // MongoDB connection
 mongoose.connect(process.env.MONGO_URI, { useNewUrlParser: true, useUnifiedTopology: true })
@@ -29,6 +26,8 @@ mongoose.connect(process.env.MONGO_URI, { useNewUrlParser: true, useUnifiedTopol
   .catch((err) => console.error(err));
 
 // Routes
+
+// Register User Route
 app.post('/api/users/register', async (req, res) => {
   try {
     const { firstname, lastname, email, phone, adults, children, days } = req.body;
@@ -45,6 +44,17 @@ app.post('/api/users/register', async (req, res) => {
     res.status(201).json({ message: 'User registered successfully' });
     console.log(newUser);
   
+  } catch (error) {
+    console.error('Error:', error);
+    res.status(500).json({ message: 'Internal Server Error' });
+  }
+});
+
+// Get All Users Route
+app.get('/api/users', async (req, res) => {
+  try {
+    const users = await User.find();
+    res.json(users);
   } catch (error) {
     console.error('Error:', error);
     res.status(500).json({ message: 'Internal Server Error' });
