@@ -54,7 +54,7 @@ app.post('/api/users/register', async (req, res) => {
 app.get('/api/users', async (req, res) => {
   try {
     const users = await User.find();
-    res.json(users);
+    res.json(newUser);
   } catch (error) {
     console.error('Error:', error);
     res.status(500).json({ message: 'Internal Server Error' });
