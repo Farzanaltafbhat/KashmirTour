@@ -7,7 +7,7 @@ const cors = require('cors');
 const mongoose = require('mongoose');
 
 // Import your User model
-const User = require('../Backend/Models/User'); // Adjust the path as needed
+const User = require('./Models/User'); // Adjust the path as needed
 
 // Configure environment variables
 require('dotenv').config();
