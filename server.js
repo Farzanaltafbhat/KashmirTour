@@ -65,9 +65,12 @@ app.get('/api/users', async (req, res) => {
 app.get('/api/packages/search', async (req, res) => {
   try {
     const { days, people } = req.query;
+    const numericDays = parseInt(days);
+    const numericPeople = parseInt(people);
+    
     const packages = await Package.find({
-      days: { $gte: days },
-      maxPeople: { $gte: people }
+      days: { $gte: numericDays },
+      maxPeople: { $gte: numericPeople }
     });
     res.json(packages);
   } catch (error) {
@@ -75,6 +78,7 @@ app.get('/api/packages/search', async (req, res) => {
     res.status(500).json({ message: 'Internal Server Error' });
   }
 });
+
 
 // Route to fetch all packages
 app.get('/api/packages', async (req, res) => {
