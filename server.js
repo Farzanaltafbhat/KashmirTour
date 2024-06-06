@@ -87,7 +87,7 @@ app.get('/api/packages', async (req, res) => {
   }
 });
 
-// Route to add a package
+// Route to add a packag
 app.post('/api/packages', async (req, res) => {
   try {
     const newPackage = new Package(req.body);
