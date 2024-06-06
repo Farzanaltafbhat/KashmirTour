@@ -8,7 +8,7 @@ const mongoose = require('mongoose');
 
 // Import your User model
 const User = require('./Models/User'); // Adjust the path as needed
-
+const Package = require('./Models/package');
 // Configure environment variables
 require('dotenv').config();
 
@@ -61,6 +61,55 @@ app.get('/api/users', async (req, res) => {
   }
 });
 
+// Route to search packages
+app.get('/api/packages/search', async (req, res) => {
+  try {
+    const { days, people } = req.query;
+    const packages = await Package.find({
+      days: { $gte: days },
+      maxPeople: { $gte: people }
+    });
+    res.json(packages);
+  } catch (error) {
+    console.error('Error:', error);
+    res.status(500).json({ message: 'Internal Server Error' });
+  }
+});
+
+// Route to fetch all packages
+app.get('/api/packages', async (req, res) => {
+  try {
+    const packages = await Package.find();
+    res.json(packages);
+  } catch (error) {
+    console.error('Error:', error);
+    res.status(500).json({ message: 'Internal Server Error' });
+  }
+});
+
+// Route to add a package
+app.post('/api/packages', async (req, res) => {
+  try {
+    const newPackage = new Package(req.body);
+    await newPackage.save();
+    res.status(201).json(newPackage);
+  } catch (error) {
+    console.error('Error:', error);
+    res.status(500).json({ message: 'Internal Server Error' });
+  }
+});
+
+// Route to delete a package
+app.delete('/api/packages/:id', async (req, res) => {
+  try {
+    const { id } = req.params;
+    await Package.findByIdAndDelete(id);
+    res.status(204).end();
+  } catch (error) {
+    console.error('Error:', error);
+    res.status(500).json({ message: 'Internal Server Error' });
+  }
+});
 // Start the server
 app.listen(PORT, () => {
   console.log(`Server is running on port ${PORT}`);
